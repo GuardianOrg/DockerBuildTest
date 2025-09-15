@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  echidna-test:
+    build: .
+    container_name: echidna-local-test
+    environment:
+      - GITHUB_URL=${GITHUB_URL}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - COMMIT_HASH=${COMMIT_HASH:-}
+      - DEPENDENCY_SETUP=${DEPENDENCY_SETUP:-}
+      - ENTRY_POINT=${ENTRY_POINT}
+    volumes:
+      - ./output:/workspace/output
+      - ./configs:/workspace/configs
+    stdin_open: true
+    tty: true
+    networks:
+      - echidna-net
+
+networks:
+  echidna-net:
+    driver: bridge

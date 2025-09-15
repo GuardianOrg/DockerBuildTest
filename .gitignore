@@ -1,0 +1,26 @@
+# Environment files
+.env
+*.env
+!env.example
+
+# Output directories
+output/
+configs/
+
+# Docker
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak
+*~
