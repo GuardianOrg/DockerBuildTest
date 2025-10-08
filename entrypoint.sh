@@ -14,6 +14,11 @@ echo "================================================"
 git config --global user.email "echidna@local.test"
 git config --global user.name "Echidna Local Test"
 
+# Configure git to use token for all GitHub operations (including submodules)
+if [ -n "$GITHUB_TOKEN" ]; then
+    git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+fi
+
 # Check required environment variables
 if [ -z "$GITHUB_URL" ]; then
     echo -e "${RED}❌ Error: GITHUB_URL is required${NC}"
