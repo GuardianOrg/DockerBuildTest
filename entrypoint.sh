@@ -44,6 +44,7 @@ if [ -n "$GITHUB_TOKEN" ]; then
     # Use token for private repos
     GIT_URL=$(echo "$GITHUB_URL" | sed "s|https://|https://${GITHUB_TOKEN}@|")
     if [ -n "$BRANCH" ]; then
+        echo -e "${YELLOW}DEBUG: Running git clone -b \"$BRANCH\" ...${NC}"
         git clone -b "$BRANCH" "$GIT_URL" /workspace/repo
     else
         git clone "$GIT_URL" /workspace/repo
@@ -51,6 +52,7 @@ if [ -n "$GITHUB_TOKEN" ]; then
 else
     # Public repo
     if [ -n "$BRANCH" ]; then
+        echo -e "${YELLOW}DEBUG: Running git clone -b \"$BRANCH\" ...${NC}"
         git clone -b "$BRANCH" "$GITHUB_URL" /workspace/repo
     else
         git clone "$GITHUB_URL" /workspace/repo
@@ -58,6 +60,7 @@ else
 fi
 
 cd /workspace/repo
+echo -e "${YELLOW}DEBUG: Current branch after clone: $(git branch --show-current)${NC}"
 
 # Checkout specific commit if provided
 if [ -n "$COMMIT_HASH" ]; then
