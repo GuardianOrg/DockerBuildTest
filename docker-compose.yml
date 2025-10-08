@@ -1,7 +1,7 @@
 services:
   echidna-test:
     build: .
-    container_name: echidna-local-test
+    container_name: ${CONTAINER_NAME:-echidna-local-test}
     environment:
       - GITHUB_URL=${GITHUB_URL}
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}

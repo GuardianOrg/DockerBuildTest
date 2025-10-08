@@ -49,6 +49,7 @@ CONFIG_FILE=".env"
 SAVE_CONFIG=false
 SHOW_LOGS=false
 DETACH=false
+CONTAINER_NAME=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -83,6 +84,16 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Generate unique container name from config file
+CONFIG_BASENAME=$(basename "$CONFIG_FILE" .env)
+if [ "$CONFIG_BASENAME" = "." ]; then
+    CONTAINER_NAME="echidna-default"
+else
+    CONTAINER_NAME="echidna-${CONFIG_BASENAME}"
+fi
+export CONTAINER_NAME
+export COMPOSE_PROJECT_NAME="${CONTAINER_NAME}-project"
 
 # Function to prompt for input with default value
 prompt_with_default() {
@@ -167,6 +178,8 @@ fi
 echo ""
 echo -e "${MAGENTA}📋 Configuration Summary${NC}"
 echo "------------------------"
+echo -e "${BLUE}Container Name:${NC} $CONTAINER_NAME"
+echo -e "${BLUE}Config File:${NC} $CONFIG_FILE"
 echo -e "${BLUE}Repository:${NC} $GITHUB_URL"
 echo -e "${BLUE}Branch:${NC} ${BRANCH:-default}"
 echo -e "${BLUE}Commit:${NC} ${COMMIT_HASH:-latest}"
@@ -187,7 +200,7 @@ echo -e "${GREEN}🚀 Starting Echidna test container...${NC}"
 if [ "$DETACH" = true ]; then
     docker-compose up -d
     echo -e "${GREEN}✅ Container started in background${NC}"
-    echo -e "${YELLOW}💡 Use 'docker logs -f echidna-local-test' to view logs${NC}"
+    echo -e "${YELLOW}💡 Use 'docker logs -f $CONTAINER_NAME' to view logs${NC}"
 else
     docker-compose up
 fi
@@ -195,7 +208,7 @@ fi
 # Show logs if requested and running in detached mode
 if [ "$SHOW_LOGS" = true ] && [ "$DETACH" = true ]; then
     echo -e "${CYAN}📜 Container logs:${NC}"
-    docker logs -f echidna-local-test
+    docker logs -f "$CONTAINER_NAME"
 fi
 
 # Cleanup function
