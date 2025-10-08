@@ -138,7 +138,9 @@ else
     # Load from config file
     if [ -f "$CONFIG_FILE" ]; then
         echo -e "${CYAN}📄 Loading configuration from $CONFIG_FILE${NC}"
-        export $(cat "$CONFIG_FILE" | grep -v '^#' | xargs)
+        set -a
+        source "$CONFIG_FILE"
+        set +a
     else
         echo -e "${RED}❌ Error: Configuration file '$CONFIG_FILE' not found${NC}"
         echo -e "${YELLOW}💡 Tip: Copy env.example to .env and fill in your values${NC}"
