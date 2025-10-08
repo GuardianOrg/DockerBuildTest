@@ -10,6 +10,10 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}🚀 Starting Echidna Local Test Environment${NC}"
 echo "================================================"
 
+# Configure git identity for forge install operations
+git config --global user.email "echidna@local.test"
+git config --global user.name "Echidna Local Test"
+
 # Check required environment variables
 if [ -z "$GITHUB_URL" ]; then
     echo -e "${RED}❌ Error: GITHUB_URL is required${NC}"
@@ -30,10 +34,18 @@ echo -e "${YELLOW}📥 Cloning repository...${NC}"
 if [ -n "$GITHUB_TOKEN" ]; then
     # Use token for private repos
     GIT_URL=$(echo "$GITHUB_URL" | sed "s|https://|https://${GITHUB_TOKEN}@|")
-    git clone "$GIT_URL" /workspace/repo
+    if [ -n "$BRANCH" ]; then
+        git clone -b "$BRANCH" "$GIT_URL" /workspace/repo
+    else
+        git clone "$GIT_URL" /workspace/repo
+    fi
 else
     # Public repo
-    git clone "$GITHUB_URL" /workspace/repo
+    if [ -n "$BRANCH" ]; then
+        git clone -b "$BRANCH" "$GITHUB_URL" /workspace/repo
+    else
+        git clone "$GITHUB_URL" /workspace/repo
+    fi
 fi
 
 cd /workspace/repo

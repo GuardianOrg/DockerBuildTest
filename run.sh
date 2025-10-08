@@ -111,6 +111,7 @@ if [ "$INTERACTIVE" = true ]; then
     
     prompt_with_default "GitHub URL (e.g., https://github.com/user/repo.git)" "" "GITHUB_URL"
     prompt_with_default "GitHub Token (optional, for private repos)" "" "GITHUB_TOKEN"
+    prompt_with_default "Branch (optional, leave empty for default branch)" "" "BRANCH"
     prompt_with_default "Commit Hash (optional, leave empty for latest)" "" "COMMIT_HASH"
     prompt_with_default "Dependency Setup Command (e.g., 'npm install && forge build')" "" "DEPENDENCY_SETUP"
     prompt_with_default "Entry Point (e.g., 'test/fuzzing/Fuzz.sol --contract Fuzz')" "" "ENTRY_POINT"
@@ -121,6 +122,7 @@ if [ "$INTERACTIVE" = true ]; then
         cat > .env <<EOF
 GITHUB_URL=$GITHUB_URL
 GITHUB_TOKEN=$GITHUB_TOKEN
+BRANCH=$BRANCH
 COMMIT_HASH=$COMMIT_HASH
 DEPENDENCY_SETUP=$DEPENDENCY_SETUP
 ENTRY_POINT=$ENTRY_POINT
@@ -131,6 +133,7 @@ EOF
     # Export variables for docker-compose
     export GITHUB_URL
     export GITHUB_TOKEN
+    export BRANCH
     export COMMIT_HASH
     export DEPENDENCY_SETUP
     export ENTRY_POINT
@@ -165,6 +168,7 @@ echo ""
 echo -e "${MAGENTA}📋 Configuration Summary${NC}"
 echo "------------------------"
 echo -e "${BLUE}Repository:${NC} $GITHUB_URL"
+echo -e "${BLUE}Branch:${NC} ${BRANCH:-default}"
 echo -e "${BLUE}Commit:${NC} ${COMMIT_HASH:-latest}"
 echo -e "${BLUE}Entry Point:${NC} $ENTRY_POINT"
 echo -e "${BLUE}Dependencies:${NC} ${DEPENDENCY_SETUP:-none}"
