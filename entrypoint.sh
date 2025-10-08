@@ -36,6 +36,10 @@ echo -e "${YELLOW}📦 Repository: $REPO_NAME${NC}"
 
 # Clone repository
 echo -e "${YELLOW}📥 Cloning repository...${NC}"
+if [ -n "$BRANCH" ]; then
+    echo -e "${YELLOW}🌿 Cloning branch: $BRANCH${NC}"
+fi
+
 if [ -n "$GITHUB_TOKEN" ]; then
     # Use token for private repos
     GIT_URL=$(echo "$GITHUB_URL" | sed "s|https://|https://${GITHUB_TOKEN}@|")
