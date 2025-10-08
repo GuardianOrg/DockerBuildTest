@@ -214,8 +214,20 @@ fi
 # Cleanup function
 cleanup() {
     echo -e "\n${YELLOW}🧹 Cleaning up...${NC}"
-    docker-compose down
-    echo -e "${GREEN}✅ Cleanup complete${NC}"
+
+    # Stop and remove container
+    if docker ps -a --filter "name=^${CONTAINER_NAME}$" --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+        docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
+        docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
+        echo -e "${GREEN}✅ Container ${CONTAINER_NAME} removed${NC}"
+    fi
+
+    # Remove network if it exists and has no other containers
+    NETWORK_NAME="${COMPOSE_PROJECT_NAME}_echidna-net"
+    if docker network ls --filter "name=^${NETWORK_NAME}$" --format "{{.Name}}" | grep -q "^${NETWORK_NAME}$"; then
+        docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
+        echo -e "${GREEN}✅ Network ${NETWORK_NAME} removed${NC}"
+    fi
 }
 
 # Set up trap for cleanup on exit (only if not detached)
