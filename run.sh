@@ -217,16 +217,21 @@ cleanup() {
 
     # Stop and remove container
     if docker ps -a --filter "name=^${CONTAINER_NAME}$" --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
-        docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
-        docker rm "$CONTAINER_NAME" >/dev/null 2>&1 || true
-        echo -e "${GREEN}✅ Container ${CONTAINER_NAME} removed${NC}"
+        if docker stop "$CONTAINER_NAME" >/dev/null 2>&1 && docker rm "$CONTAINER_NAME" >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ Container ${CONTAINER_NAME} removed${NC}"
+        else
+            echo -e "${RED}⚠️  Failed to remove container ${CONTAINER_NAME}${NC}"
+        fi
     fi
 
     # Remove network if it exists and has no other containers
     NETWORK_NAME="${COMPOSE_PROJECT_NAME}_echidna-net"
     if docker network ls --filter "name=^${NETWORK_NAME}$" --format "{{.Name}}" | grep -q "^${NETWORK_NAME}$"; then
-        docker network rm "$NETWORK_NAME" >/dev/null 2>&1 || true
-        echo -e "${GREEN}✅ Network ${NETWORK_NAME} removed${NC}"
+        if docker network rm "$NETWORK_NAME" >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ Network ${NETWORK_NAME} removed${NC}"
+        else
+            echo -e "${RED}⚠️  Failed to remove network ${NETWORK_NAME} (may still have containers)${NC}"
+        fi
     fi
 }
 
