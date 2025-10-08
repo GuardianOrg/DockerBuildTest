@@ -87,7 +87,7 @@ done
 
 # Generate unique container name from config file
 CONFIG_BASENAME=$(basename "$CONFIG_FILE" .env)
-if [ "$CONFIG_BASENAME" = "." ]; then
+if [ "$CONFIG_BASENAME" = "." ] || [ "$CONFIG_BASENAME" = ".env" ] || [ -z "$CONFIG_BASENAME" ]; then
     CONTAINER_NAME="echidna-default"
 else
     CONTAINER_NAME="echidna-${CONFIG_BASENAME}"
