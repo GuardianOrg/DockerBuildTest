@@ -25,7 +25,7 @@ RUN echo "🔧 Installing Echidna + Foundry..." && \
     curl -fsSL https://guardianexec-echidna.nyc3.digitaloceanspaces.com/echidna -o /usr/local/bin/echidna && \
     chmod +x /usr/local/bin/echidna && \
     # Manual Foundry install (avoids foundryup path issues)
-    curl -L https://github.com/foundry-rs/foundry/releases/download/nightly-de33b6af53005037b463318d2628b5cfcaf39916/foundry_nightly_linux_amd64.tar.gz -o foundry.tar.gz && \
+    curl -L https://github.com/foundry-rs/foundry/releases/download/nightly/foundry_nightly_linux_amd64.tar.gz -o foundry.tar.gz && \
     mkdir -p /root/.foundry && \
     tar -xzf foundry.tar.gz -C /root/.foundry && \
     # Link binaries globally so forge works
