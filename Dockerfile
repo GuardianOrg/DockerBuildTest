@@ -21,6 +21,8 @@ RUN apt-get update && \
 
 # Setup script from your requirements
 RUN echo "🔧 Installing Echidna + Foundry..." && \
+    # Install solc-select and crytic-compile for Solidity compilation
+    pip3 install solc-select crytic-compile && \
     # Download custom echidna binary from DigitalOcean Spaces
     curl -fsSL https://guardianexec-echidna.nyc3.digitaloceanspaces.com/echidna -o /usr/local/bin/echidna && \
     chmod +x /usr/local/bin/echidna && \
